@@ -1,7 +1,7 @@
 QUERY PLAN
-"Seq Scan on person  (cost=0.00..10558.60 rows=4 width=369) (actual time=0.103..387.400 rows=1 loops=1)"
+"Seq Scan on person  (cost=0.00..10558.60 rows=4 width=369) (actual time=0.024..302.326 rows=1 loops=1)"
 "  Filter: (((first_name)::text = 'John'::text) AND ((last_name)::text = 'Doe'::text))"
 "  Rows Removed by Filter: 1000001"
 "  Buffers: shared hit=8122"
-"Planning Time: 0.529 ms"
-"Execution Time: 387.519 ms"
+"Planning Time: 0.118 ms"
+"Execution Time: 302.348 ms"

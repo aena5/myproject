@@ -1,6 +1,6 @@
 QUERY PLAN
-"Index Scan using person_name_idx on person  (cost=0.42..8.44 rows=1 width=32) (actual time=1.896..1.929 rows=1 loops=1)"
+"Index Scan using person_name_idx on person  (cost=0.42..8.44 rows=1 width=32) (actual time=0.582..0.589 rows=1 loops=1)"
 "  Index Cond: (((first_name)::text = 'John'::text) AND ((last_name)::text = 'Doe'::text))"
 "  Buffers: shared hit=1 read=3"
-"Planning Time: 1.500 ms"
-"Execution Time: 2.094 ms"
+"Planning Time: 0.546 ms"
+"Execution Time: 0.638 ms"

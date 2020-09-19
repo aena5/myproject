@@ -9,7 +9,7 @@ CREATE TABLE person(
    last_name VARCHAR(50),
    birth_date DATE,
    gender gender_type,
-   salary NUMERIC(400,2)
+   salary NUMERIC(400,2) CONSTRAINT salary_nonnegative CHECK (salary >= 0)
 );
 
 comment on column person.id is 'unique numerical value which automatically increments after a new record is inserted';
@@ -24,8 +24,6 @@ INSERT INTO
 VALUES 
    ('John','Doe','01-JAN-2020','MALE',10000.50),
    ('Mary','Jane','29-FEB-2020','FEMALE',5000.12);
-   
-COMMIT;
 
 insert into person(
     first_name, last_name, birth_date, gender, salary
@@ -107,8 +105,8 @@ EXPLAIN (ANALYZE, BUFFERS) select count(1), gender, round(salary, 3)
 
 --POST-C.2)
 EXPLAIN (ANALYZE, BUFFERS) select count(1), gender, round(salary, 3)
-   from person
-  group by salary, gender;  
+from person
+group by gender, salary;  
 
 
    
