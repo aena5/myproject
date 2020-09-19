@@ -1,0 +1,9 @@
+QUERY PLAN
+"GroupAggregate  (cost=0.42..71665.61 rows=100000 width=50) (actual time=0.171..2137.956 rows=198647 loops=1)"
+"  Group Key: salary, gender"
+"  Buffers: shared hit=999669 read=3834 written=1"
+"  ->  Index Only Scan using person_gender_sal_idx on person  (cost=0.42..62915.60 rows=1000002 width=10) (actual time=0.140..1344.152 rows=1000002 loops=1)"
+"        Heap Fetches: 1000002"
+"        Buffers: shared hit=999669 read=3834 written=1"
+"Planning Time: 0.149 ms"
+"Execution Time: 2173.937 ms"

@@ -1,0 +1,6 @@
+QUERY PLAN
+"Index Scan using person_other_info_idx on person  (cost=0.42..14574.71 rows=1 width=32) (actual time=169.445..169.446 rows=0 loops=1)"
+"  Index Cond: ((gender = 'FEMALE'::gender_type) AND (salary > 5000.50) AND (birth_date >= '2000-01-01 00:00:00'::timestamp without time zone) AND (birth_date <= '2020-12-31 00:00:00'::timestamp without time zone))"
+"  Buffers: shared read=1824"
+"Planning Time: 0.210 ms"
+"Execution Time: 169.476 ms"

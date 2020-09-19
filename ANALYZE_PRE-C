@@ -1,0 +1,12 @@
+QUERY PLAN
+"GroupAggregate  (cost=28656.31..30483.76 rows=16244 width=44) (actual time=7524.809..10031.011 rows=198647 loops=1)"
+"  Group Key: gender, (round(salary, 3))"
+"  Buffers: shared hit=8122, temp read=3127 written=3144"
+"  ->  Sort  (cost=28656.31..29062.41 rows=162440 width=36) (actual time=7524.789..9064.304 rows=1000002 loops=1)"
+"        Sort Key: gender, (round(salary, 3))"
+"        Sort Method: external merge  Disk: 20440kB"
+"        Buffers: shared hit=8122, temp read=3127 written=3144"
+"        ->  Seq Scan on person  (cost=0.00..10152.50 rows=162440 width=36) (actual time=0.019..1075.485 rows=1000002 loops=1)"
+"              Buffers: shared hit=8122"
+"Planning Time: 0.087 ms"
+"Execution Time: 10104.028 ms"

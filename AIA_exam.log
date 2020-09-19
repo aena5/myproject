@@ -1,0 +1,128 @@
+22:36:13  START Executing for: 'TEST_DB/postgres' [PostgreSQL], Database: postgres, Schema: public
+22:36:13  SUCCESS  [DROP - 0 rows, 0.035 secs]  OK. No rows were affected  
+DROP TABLE IF EXISTS person;
+22:36:13  SUCCESS  [DROP - 0 rows, 0.005 secs]  OK. No rows were affected  
+DROP TYPE IF EXISTS gender_type;
+22:36:13  SUCCESS  [CREATE - 0 rows, 0.005 secs]  OK. No rows were affected  
+CREATE TYPE gender_type AS ENUM('MALE','FEMALE');
+22:36:13  SUCCESS  [CREATE - 0 rows, 0.009 secs]  OK. No rows were affected  
+CREATE TABLE person(
+   id SERIAL PRIMARY KEY,
+   first_name VARCHAR(50),
+   last_name VARCHAR(50),
+   birth_date DATE,
+   gender gender_type,
+   salary NUMERIC(400,2)
+);
+22:36:13  SUCCESS  [COMMENT - 0 rows, 0.002 secs]  OK. No rows were affected  
+comment on column person.id is 'unique numerical value which automatically increments after a new record is inserted';
+22:36:13  SUCCESS  [COMMENT - 0 rows, 0.002 secs]  OK. No rows were affected  
+comment on column person.first_name is 'first name of the person; max length of 50';
+22:36:13  SUCCESS  [COMMENT - 0 rows, 0.001 secs]  OK. No rows were affected  
+comment on column person.last_name  is 'last name of the person; max length of 50';
+22:36:13  SUCCESS  [COMMENT - 0 rows, 0.004 secs]  OK. No rows were affected  
+comment on column person.birth_date is 'date of birth of the person';
+22:36:13  SUCCESS  [COMMENT - 0 rows, 0.001 secs]  OK. No rows were affected  
+comment on column person.gender     is 'indicates whether the person is MALE or FEMALE';
+22:36:13  SUCCESS  [COMMENT - 0 rows, 0.005 secs]  OK. No rows were affected  
+comment on column person.salary     is 'salary of person; should support up to 2 decimal points; negative value is not allowed';
+22:36:13  SUCCESS  [INSERT - 2 rows, 0.002 secs]  OK  
+INSERT INTO 
+   person (first_name, last_name, birth_date, gender, salary)
+VALUES 
+   ('John','Doe','01-JAN-2020','MALE',10000.50),
+   ('Mary','Jane','29-FEB-2020','FEMALE',5000.12);
+22:36:13  WARNING  [COMMIT - 0 rows, 0.001 secs]  OK. No rows were affected
+SQLWarning: 
+SQL State: 25P01 --- there is no transaction in progress  
+COMMIT;
+22:36:13  SUCCESS  [INSERT - 1,000,000 rows, 17.885 secs]  OK  
+insert into person(
+    first_name, last_name, birth_date, gender, salary
+)
+select
+(ARRAY['Aiden','Anika','Ariya','Ashanti','Avery',
+'Cameron','Ceri','Che','Danica','Darcy',
+'Dion','Eman','Eren','Esme','Frankie',
+'Gurdeep','Haiden','Indi','Isa','Jaskaran',
+'Jaya','Jo ','Jodie','Kacey','Kameron',
+'Kayden','Keeley','Kenzie','Lucca','Macauley',
+'Manraj','Nur','Oluwatobiloba','Reiss','Riley',
+'Rima','Ronnie','Ryley','Sam','Sana',
+'Shola','Sierra','Tamika','Taran','Teagan',
+'Tia','Tiegan','Virginia','Zhane','Zion'])[floor(random()*50)+1],
+(ARRAY['Ahmad','Andersen','Arias','Barlow','Beck'
+'Bloggs','Bowes','Buck','Burris','Cano'
+'Chaney','Coombes','Correa','Coulson','Craig'
+'Frye','Hackett','Hale','Huber','Hyde'
+'Irving','Joyce','Kelley','Kim','Larson'
+'Lynn','Markham','Mejia','Miranda','Neal'
+'Newton','Novak','Ochoa','Pate','Paterson'
+'Pennington','Rubio','Santana','Schaefer','Schofield'
+'Shaffer','Sweeney','Talley','Trevino','Tucker'
+'Velazquez','Vu','Wagner','Walton','Woodward'])[floor(random()*40)+1],
+timestamp '1970-01-01' + random() * (timestamp '1970-01-01' - timestamp '2070-12-31'),
+(ARRAY['FEMALE', 'MALE'])[floor(random()*2)+1]::gender_type,
+floor(random()*(100000.00-1.00+1))+1.00
+from generate_series(1, 1000000);
+22:36:31  WARNING  [COMMIT - 0 rows, 0.003 secs]  OK. No rows were affected
+SQLWarning: 
+SQL State: 25P01 --- there is no transaction in progress  
+commit;
+22:36:31  SUCCESS  [EXPLAIN - 6 rows, 0.392 secs]  Result set fetched  
+EXPLAIN (ANALYZE, BUFFERS) select * 
+  from person
+ where first_name = 'John'
+   and last_name = 'Doe';
+22:36:32  SUCCESS  [EXPLAIN - 6 rows, 0.568 secs]  Result set fetched  
+EXPLAIN (ANALYZE, BUFFERS) select * 
+  from person
+ where gender = 'FEMALE'
+   and salary > 5000.50
+   and birth_date >= (TIMESTAMP 'epoch' + 946684800 * INTERVAL '1 second') 
+   and birth_date <= (TIMESTAMP 'epoch' + 1609372800 * INTERVAL '1 second');
+22:36:32  SUCCESS  [EXPLAIN - 11 rows, 10.105 secs]  Result set fetched  
+EXPLAIN (ANALYZE, BUFFERS) select count(1), gender, round(salary, 3)
+   from person
+  group by 2,3;
+22:36:43  WARNING  [DROP - 0 rows, 0.001 secs]  OK. No rows were affected
+SQLWarning: 
+SQL State: 00000 --- index "person_name_idx" does not exist, skipping  
+DROP INDEX IF EXISTS person_name_idx;
+22:36:43  WARNING  [DROP - 0 rows, 0.003 secs]  OK. No rows were affected
+SQLWarning: 
+SQL State: 00000 --- index "person_other_info_idx" does not exist, skipping  
+DROP INDEX IF EXISTS person_other_info_idx;
+22:36:43  WARNING  [DROP - 0 rows, 0.002 secs]  OK. No rows were affected
+SQLWarning: 
+SQL State: 00000 --- index "person_gender_sal_idx" does not exist, skipping  
+DROP INDEX IF EXISTS person_gender_sal_idx;
+22:36:43  SUCCESS  [CREATE - 0 rows, 11.214 secs]  OK. No rows were affected  
+CREATE INDEX person_name_idx ON person (first_name, last_name);
+22:36:54  SUCCESS  [CREATE - 0 rows, 6.434 secs]  OK. No rows were affected  
+CREATE INDEX person_other_info_idx ON person (gender, salary, birth_date);
+22:37:00  SUCCESS  [CREATE - 0 rows, 2.956 secs]  OK. No rows were affected  
+CREATE INDEX person_gender_sal_idx ON person (salary, gender);
+22:37:03  SUCCESS  [ANALYZE - 0 rows, 0.636 secs]  OK. No rows were affected  
+ANALYZE person;
+22:37:04  SUCCESS  [EXPLAIN - 5 rows, 0.005 secs]  Result set fetched  
+EXPLAIN (ANALYZE, BUFFERS) select * 
+  from person
+ where first_name = 'John'
+   and last_name = 'Doe';
+22:37:04  SUCCESS  [EXPLAIN - 5 rows, 0.171 secs]  Result set fetched  
+EXPLAIN (ANALYZE, BUFFERS) select * 
+  from person
+ where gender = 'FEMALE'
+   and salary > 5000.50
+   and birth_date >= (TIMESTAMP 'epoch' + 946684800 * INTERVAL '1 second') 
+   and birth_date <= (TIMESTAMP 'epoch' + 1609372800 * INTERVAL '1 second');
+22:37:04  SUCCESS  [EXPLAIN - 11 rows, 5.168 secs]  Result set fetched  
+EXPLAIN (ANALYZE, BUFFERS) select count(1), gender, round(salary, 3)
+   from person
+  group by 3, 2;
+22:37:09  SUCCESS  [EXPLAIN - 8 rows, 2.175 secs]  Result set fetched  
+EXPLAIN (ANALYZE, BUFFERS) select count(1), gender, round(salary, 3)
+   from person
+  group by salary, gender;
+22:37:12  END Execution 28 statement(s) executed, 1,000,054 row(s) affected, exec/fetch time: 57.790/0.000 secs   [28 successful, 5 Warnings, 0 errors]

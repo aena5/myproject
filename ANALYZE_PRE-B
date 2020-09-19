@@ -1,0 +1,7 @@
+QUERY PLAN
+"Seq Scan on person  (cost=0.00..11370.80 rows=1 width=369) (actual time=563.985..563.985 rows=0 loops=1)"
+"  Filter: ((salary > 5000.50) AND (birth_date >= '2000-01-01 00:00:00'::timestamp without time zone) AND (birth_date <= '2020-12-31 00:00:00'::timestamp without time zone) AND (gender = 'FEMALE'::gender_type))"
+"  Rows Removed by Filter: 1000002"
+"  Buffers: shared hit=8122"
+"Planning Time: 0.093 ms"
+"Execution Time: 564.029 ms"
